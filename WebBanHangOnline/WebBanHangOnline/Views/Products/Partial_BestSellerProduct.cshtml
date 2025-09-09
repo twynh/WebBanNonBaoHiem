@@ -1,0 +1,108 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Products>
+<style>
+    .slider__container {
+        height: 400px;
+        display: flex;
+        width: 1100px;
+        overflow-x: scroll;
+        margin-top: 60px;
+           
+    }
+
+    .product_info {
+    height: 92px;
+    
+    }
+
+    .item__width {
+        width: 220px;
+    }
+
+    .slider__container::-webkit-scrollbar {
+        width: 2px;
+        /*margin-top: 24px;*/
+    }   
+
+    .slider__container::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+        border-radius:4px
+       
+    }
+
+    .slider__container::-webkit-scrollbar-thumb {
+        background-color: #fe4c50;
+        border-radius: 4px
+    }
+   
+</style>
+@if (Model != null && Model.Any())
+{
+
+
+
+
+    <div class="best_sellers">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title new_arrivals_title">
+                        <h2>Best Sellers</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="slider__container">
+                @foreach (var item in Model)
+                {
+                    var strImage = "";
+                    var img = item.ProductImage.FirstOrDefault(x => x.isDefault);
+                    if (img != null)
+                    {
+                        strImage = img.Image;
+
+                    }
+                        <div class="product-item item__width">
+                            <div class="product discount item__width">
+                                <div class="product_image">
+                                    <a href="/chi-tiet/@item.Alias-p@(item.Id)">
+                                        <img src="@strImage" alt="@item.Title" />
+                                    </a>
+                                </div>
+                                <div class="favorite favorite_left"></div>
+                                @if (item.PriceSale > 0)
+                                {
+
+                                    <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>sale</span></div>
+                                }
+                                <div class="product_info">
+                                    <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>
+                                    @if (item.PriceSale > 0)
+                                    {
+                                        <div class="product_price">$@item.PriceSale<span>$@item.Price</span></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="product_price">$@item.Price</div>
+                                    }
+
+                                </div>
+                                <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@item.Id">add to cart</a></div>
+                            </div>
+                        </div>
+                }
+
+                <!-- Slider Navigation -->
+
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+
+

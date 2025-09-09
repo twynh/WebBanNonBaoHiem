@@ -1,0 +1,112 @@
+﻿@model WebBanHangOnline.Models.EF.Order
+@{
+    ViewBag.Title = "View";
+}
+
+@section naviheader {
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Chi tiết đơn hàng</a>
+        </li>
+    </ul>
+
+}
+
+
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Chi tiết đơn hàng</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <lable>Mã đơn hàng</lable>
+                        <p class="form-control">@Model.Code</p>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <lable>Tên khách hàng</lable>
+                        <p class="form-control">@Model.CustumerName</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <lable>Tổng tiền</lable>
+                        <p class="form-control">$@Model.TotalAmount.ToString()</p>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <lable>Số điện thoại</lable>
+                        <p class="form-control">@Model.Phone</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <lable>Ngày tạo</lable>
+                        <p class="form-control">@Model.CreatedDate.ToString("dd/mm/yyyy")</p>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <lable>Email</lable>
+                        <p class="form-control">@Model.Email</p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <lable>Trạng thái</lable>
+                        <p class="form-control">@(Model.TypePayment ==1 ?"Chờ thanh toán": "Đã thanh toán")</p>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Danh sách sản phẩm mua</h2>
+                </div>
+                <div class="col-md-12">
+                    @Html.Action("Partial_SanPham","Order", new { id= Model.Id })
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->

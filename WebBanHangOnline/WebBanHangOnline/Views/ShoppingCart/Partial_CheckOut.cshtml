@@ -1,0 +1,44 @@
+﻿@model WebBanHangOnline.Models.OrderViewModel
+@using (Ajax.BeginForm("CheckOut", "ShoppingCart", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "load_data", 
+    OnComplete = "OnSuccess",
+    OnFailure = "OnFailure",
+
+
+
+}, new {@Id ="myForm" }))
+{
+    @Html.AntiForgeryToken()
+<h3>
+    Customer information
+</h3>
+    <div class="form-group">
+        <lable>Full name</lable>
+        <input type="text" name="CustumerName" required class="form-control" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <lable>Phone</lable>
+        <input type="text" name="Phone"  class="form-control" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <lable>Address</lable>
+        <input type="text" name="Address" class="form-control" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <lable>Email</lable>
+        <input type="text" name="Email" class="form-control" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <lable>Payments</lable>
+        <select class="form-control" name="TypePayment">
+            <option value="1" selected>COD</option>
+            <option value="2">Banking</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-block btn-success">Oder</button>
+    </div>
+}

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- Content Header (Page header) -->
+@section naviheader {
+  
+
+
+}
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">List of account</h3>
+
+            <div class="card-tools">
+                <a href="/admin/account/create" class=" btn btn-success">Create</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Account</th>
+                        <th>User's name</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = 1;
+                        foreach (var item in Model)
+                        {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Fullname</td>
+                        <td>@item.Email</td>
+                        <td>
+                            <a href="/admin/account/edit/@item.UserName" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="#" data-user="@item.UserName" class="btn btn-sm btn-danger btnDelete">Delete</a>
+                        </td>
+                    </tr>
+                            i++;
+                        }
+
+                    }
+                </tbody>
+            </table>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->

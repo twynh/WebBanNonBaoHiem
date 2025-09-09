@@ -1,0 +1,256 @@
+﻿@model PagedList.PagedList<WebBanHangOnline.Models.EF.Products>
+@using PagedList.Mvc;
+@using PagedList;
+
+
+
+@{
+    ViewBag.Title = "Danh sách san pham";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader {
+   
+
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Product Management</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    @*<li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Sản phẩm</li>*@
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">List of products</h3>
+
+            <div class="card-tools">
+                <a href="/admin/product/add" class="btn btn-primary">Create</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Image</th>
+                        <th>Product's name</th>
+                        <th>Category</th>
+                        <th>Qauntity</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th>Hot</th>
+                        <th>Home</th>
+                        <th>Display</th>
+
+
+                    </tr>
+                </thead>
+                <tbody class="body_overflow">
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+                        foreach (var item in Model)
+                        {
+                            var strCheck = item.isActive ? "<a ><i class='fa fa-check text-success'></i></a>" : "<a ><i class='fas fa-times text-danger'></i></a>";
+                            var strCheckHome = item.isHome ? "<a ><i class='fa fa-check text-success'></i></a>" : "<a ><i class='fas fa-times text-danger'></i></a>";
+                            var strCheckHot = item.isHot ? "<a ><i class='fa fa-check text-success'></i></a>" : "<a ><i class='fas fa-times text-danger'></i></a>";
+                            <tr id="trow_@item.Id pro_item">
+                                <td>@i</td>
+                                <td><img class="imgproduct" data-id="@item.Id" src="@item.ProductImage.FirstOrDefault( x => x.isDefault).Image" width="50" /></td>
+
+                                @*<td><img src="@item.ProductImage.FirstOrDefault(x => x.isDefault).Image" width="50" alt="Alternate Text" /></td>*@
+                                <td>@item.Title</td>
+                                <td>@item.ProductCategory.Title</td>
+                                <td @*class="text-center"*@>@item.Quantity</td>
+                                <td>@item.Price</td>
+                                <td>@item.CreatedDate.ToString("dd/mm/yy")</td>
+                                <td class="text-center">
+                                    <button href="#" data-id="@item.Id" class="btnHot btn">@Html.Raw(strCheckHot)</button>
+                                </td>
+                                <td class="text-center">
+                                    <button href="#" data-id="@item.Id" class="btnHome btn">@Html.Raw(strCheckHome)</button>
+                                </td>
+                                <td class="text-center">
+                                    <button href="#" data-id="@item.Id" class="btnActive btn">@Html.Raw(strCheck)</button>
+                                </td>
+                                <td style="text-align:center">
+                                    <a  href="/admin/product/edit/@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Delete</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+
+                    }
+
+
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">Nothing!</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6" style="text-align:right;">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+
+<div id="dialog">
+
+    <iframe id="myIframe" style="border: 0; width:100%; height:100%"></iframe>
+</div>
+<!-- /.content -->
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#dialog").dialog({
+                autoOpen: false,
+                show: "fade",
+                hide: "fade",
+                modal: true,
+                height: '600',
+                width: '720',
+                resizable: true,
+                title: 'Quản lý ảnh sản phẩm',
+                close: function () {
+                    window.location.relpad();
+                }
+            });
+
+            $('body').on("click", ".imgproduct", function () {
+                var proid = $(this).attr("data-id");
+                $("#dialog #myIframe").attr("src", "/admin/ProductImage/Index?id=" + proid)
+                $('#dialog').dialog('open');
+                return false;
+            });
+
+
+            $('body').on('click', '.btnDelete', function () {
+                var id = $(this).data("id");
+                var conf = confirm("Bạn có muốn xóa bản ghi này không");
+                if (conf === true) {
+                    $.ajax({
+                        url: '/admin/product/delete',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (rs) {
+                            if (rs.success) {
+                                $('#trow_' + id).remove();
+                            }
+                        }
+                    });
+                }
+            });
+
+            $('body').on('click', '.btnHome', function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var id = btn.data("id");
+                $.ajax({
+                    url: '/admin/Product/IsHome',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsHome) {
+                                btn.html("<i class='fa fa-check text-success'></i>")
+                            }
+                            else {
+                                btn.html("<i class='fas fa-times text-danger'></i>")
+                            }
+
+                        }
+
+                    }
+
+                });
+            });
+
+            $('body').on('click', '.btnActive', function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var id = btn.data("id");
+                $.ajax({
+                    url: '/admin/Product/IsActive',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsActive) {
+                                btn.html("<i class='fa fa-check text-success'></i>")
+                            }
+                            else {
+                                btn.html("<i class='fas fa-times text-danger'></i>")
+                            }
+
+                        }
+
+                    }
+
+                });
+            });
+
+            $('body').on('click', '.btnHot', function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var id = btn.data("id");
+                $.ajax({
+                    url: '/admin/Product/IsHot',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsHot) {
+                                btn.html("<i class='fa fa-check text-success'></i>")
+                            }
+                            else {
+                                btn.html("<i class='fas fa-times text-danger'></i>")
+                            }
+
+                        }
+
+                    }
+
+                });
+            });
+
+
+        });
+    </script>
+
+}

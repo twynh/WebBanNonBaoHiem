@@ -1,0 +1,35 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.OrderDetail>
+@if (Model != null && Model.Any())
+{
+    var i = 1;
+
+    <table class="table table-hover">
+        <thead >
+            <tr class="text-center">
+                <th>#</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>@i</td>
+                    <td>@item.Product.Title</td>
+                    <td>$@item.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>$@(item.Price * item.Quantity)<td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                i++;
+
+            }
+        </tbody>
+    </table>
+
+}

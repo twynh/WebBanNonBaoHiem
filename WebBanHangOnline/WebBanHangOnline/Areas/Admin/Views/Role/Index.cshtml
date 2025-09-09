@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNet.Identity.EntityFramework
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- Content Header (Page header) -->
+@section naviheader {
+    
+
+}
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">List of role</h3>
+
+            <div class="card-tools">
+                <a href="/admin/role/create" class=" btn btn-success">Create</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any()) {
+                        var i = 1;
+                        foreach (var item in Model) { 
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.Name</td>
+                                <td></td>
+                            </tr>
+                            i++;
+                        }
+
+                    }
+                </tbody>
+            </table>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
